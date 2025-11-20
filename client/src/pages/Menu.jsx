@@ -4,7 +4,7 @@ import { useCart } from '../context/CartContext';
 import { api } from '../utils/api';
 
 export default function Menu() {
-  const { addToCart, getTotalItems } = useCart();
+  const { addToCart, getItemQuantity } = useCart();
   const [items, setItems] = useState([]);
   const [types, setTypes] = useState([]);
   const [selectedType, setSelectedType] = useState('');
@@ -121,9 +121,24 @@ export default function Menu() {
                   <strong style={{ fontSize: '1.3rem', color: '#6F4E37' }}>KSh {item.price}</strong>
                   <span style={{ backgroundColor: '#E0E0E0', padding: '0.2rem 0.6rem', borderRadius: '20px', fontSize: '0.85rem' }}>{item.itemType?.name || 'Uncategorized'}</span>
                 </div>
-                <button onClick={() => addToCart(item)} style={{ width: '100%', padding: '0.8rem', backgroundColor: '#6F4E37', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', marginBottom: '1rem' }}>
-                  Add to Cart {getTotalItems() > 0 && `(${getTotalItems()})`}
-                </button>
+                <button 
+                  onClick={() => addToCart(item)}
+                  style={{ 
+                    width: '100%',
+                    padding: '0.8rem',
+                    backgroundColor: '#6F4E37',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    marginBottom: '1rem'
+                  }}
+              >       
+              Add to Cart {getItemQuantity(item._id) > 0 && `(${getItemQuantity(item._id)})`}
+            </button>
+
                 {isLoggedIn && (
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
                     <Link to={`/menu/edit/${item._id}`} style={{ padding: '0.6rem', backgroundColor: '#2196F3', color: 'white', textAlign: 'center', borderRadius: '6px', textDecoration: 'none', fontWeight: '600' }}>Edit</Link>

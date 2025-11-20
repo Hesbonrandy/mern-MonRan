@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { api } from '../utils/api';
 import OrderNotification from '../components/OrderNotification';
 
 export default function AdminOrders() {
@@ -12,7 +12,7 @@ export default function AdminOrders() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get('/api/orders');
+        const res = await api.get('/api/orders');
         const sortedOrders = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setOrders(sortedOrders);
         
@@ -43,7 +43,7 @@ export default function AdminOrders() {
 
   const updateStatus = async (id, status) => {
     try {
-      await axios.patch(`/api/orders/${id}/status`, { status });
+      await api.patch(`/api/orders/${id}/status`, { status });
       setOrders(orders.map(order => 
         order._id === id ? { ...order, status } : order
       ));

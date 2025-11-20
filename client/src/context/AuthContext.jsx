@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { api } from '../utils/api';
 
 const AuthContext = createContext();
 
@@ -17,30 +18,22 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const checkIsAdmin = (email) => {
-    return email === 'hesbonomondi66@gmail.com'; //
-  };
-
   const login = async (email, password) => {
-    const res = await axios.post('/api/auth/login', { email, password });
+    const res = await api.post('/api/auth/login', { email, password });
     const { token, ...userData } = res.data;
-    const isAdmin = checkIsAdmin(email);
-    const userWithRole = { ...userData, isAdmin };
     localStorage.setItem('token', token);
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    setUser(userWithRole);
-    return userWithRole;
+    setUser(userData);
+    return userData;
   };
 
   const register = async (email, password) => {
-    const res = await axios.post('/api/auth/register', { email, password });
+    const res = await api.post('/api/auth/register', { email, password });
     const { token, ...userData } = res.data;
-    const isAdmin = checkIsAdmin(email);
-    const userWithRole = { ...userData, isAdmin };
     localStorage.setItem('token', token);
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    setUser(userWithRole);
-    return userWithRole;
+    setUser(userData);
+    return userData;
   };
 
   const logout = () => {

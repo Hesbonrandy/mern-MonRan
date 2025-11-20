@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { api } from '../utils/api';
 
 export default function AdminTools() {
   const [backups, setBackups] = useState([]);
@@ -13,7 +13,7 @@ export default function AdminTools() {
 
   const fetchBackups =  () => {
     try {
-      const res =  axios.get('/api/admin/backups');
+      const res =  api.get('/api/admin/backups');
       setBackups(res.data);
     } catch (err) {
       console.error('Failed to load backups:', err);
@@ -27,7 +27,7 @@ export default function AdminTools() {
     
     setLoading(true);
     try {
-      await axios.post('/api/admin/reset/hard');
+      await api.post('/api/admin/reset/hard');
       alert('✅ Hard reset completed! Menu restored to default.');
       navigate('/menu');
     } catch (err) {
@@ -40,7 +40,7 @@ export default function AdminTools() {
   const handleSoftReset = async () => {
     setLoading(true);
     try {
-      await axios.post('/api/admin/reset/soft');
+      await api.post('/api/admin/reset/soft');
       alert('✅ Soft reset completed! Only changed items were updated.');
       navigate('/menu');
     } catch (err) {
@@ -57,7 +57,7 @@ export default function AdminTools() {
     
     setLoading(true);
     try {
-      await axios.post(`/api/admin/backups/restore/${filename}`);
+      await api.post(`/api/admin/backups/restore/${filename}`);
       alert(`✅ Restored from ${filename}!`);
       navigate('/menu');
     } catch (err) {
